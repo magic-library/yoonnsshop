@@ -32,6 +32,7 @@ public class MemberService {
     }
 
     public Optional<Member> registerMember(JoinDto joinDto) {
+        validateMemberDto(joinDto);
         Member member = new Member.Builder()
                 .withEmail(joinDto.getPrincipal())
                 .withPassword(joinDto.getCredentials())
@@ -42,6 +43,12 @@ public class MemberService {
             return Optional.of(savedMember);
         } catch (Exception e) {
             return Optional.empty();
+        }
+    }
+
+    private void validateMemberDto(JoinDto joinDto) {
+        if (joinDto.getPrincipal().isEmpty() || joinDto.getCredentials().isEmpty()) {
+            throw new IllegalArgumentException("Email and password must be provided");
         }
     }
 }

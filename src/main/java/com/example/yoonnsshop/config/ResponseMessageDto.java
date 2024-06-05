@@ -1,4 +1,4 @@
-package com.example.yoonnsshop.members.dto;
+package com.example.yoonnsshop.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,11 +7,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ResponseMessageDto {
+public class ResponseMessageDto<T> {
     private boolean success;
-    private String response;
+    private T response;
 
-    public ResponseMessageDto(boolean success, String response) {
+    public ResponseMessageDto(boolean success, T response) {
         this.success = success;
         this.response = response;
     }

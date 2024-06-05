@@ -2,7 +2,8 @@ package com.example.yoonnsshop.members;
 
 import com.example.yoonnsshop.members.domain.Member;
 import com.example.yoonnsshop.members.dto.JoinDto;
-import com.example.yoonnsshop.members.dto.ResponseMessageDto;
+import com.example.yoonnsshop.config.ResponseMessageDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class MemberController {
     }
 
     @PostMapping("join")
-    public ResponseEntity<ResponseMessageDto> join(@RequestBody JoinDto joinDto) {
+    public ResponseEntity<ResponseMessageDto> join(@RequestBody @Valid JoinDto joinDto) {
         if (memberService.findByEmail(joinDto.getPrincipal()).isPresent()) {
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(false, "Email already exists");
             return ResponseEntity.badRequest().body(responseMessageDto);
