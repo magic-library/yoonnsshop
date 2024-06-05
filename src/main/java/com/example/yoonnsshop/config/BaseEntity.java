@@ -1,4 +1,4 @@
-package com.example.yoonnsshop.domain;
+package com.example.yoonnsshop.config;
 
 import jakarta.persistence.*;
 import lombok.Getter;

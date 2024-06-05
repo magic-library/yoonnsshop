@@ -1,7 +1,7 @@
 package com.example.yoonnsshop.members;
 
-import com.example.yoonnsshop.members.domain.Member;
-import com.example.yoonnsshop.members.repository.MemberRepository;
+import com.example.yoonnsshop.domain.members.entity.Member;
+import com.example.yoonnsshop.domain.members.repository.MemberRepository;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

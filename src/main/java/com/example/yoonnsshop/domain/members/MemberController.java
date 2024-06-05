@@ -1,7 +1,7 @@
-package com.example.yoonnsshop.members;
+package com.example.yoonnsshop.domain.members;
 
-import com.example.yoonnsshop.members.domain.Member;
-import com.example.yoonnsshop.members.dto.JoinDto;
+import com.example.yoonnsshop.domain.members.dto.JoinDto;
+import com.example.yoonnsshop.domain.members.entity.Member;
 import com.example.yoonnsshop.config.ResponseMessageDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

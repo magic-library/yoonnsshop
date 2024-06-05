@@ -1,6 +1,6 @@
-package com.example.yoonnsshop.members.repository;
+package com.example.yoonnsshop.domain.members.repository;
 
-import com.example.yoonnsshop.members.domain.Member;
+import com.example.yoonnsshop.domain.members.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,10 @@
 package com.example.yoonnsshop.members;
 
 
-import com.example.yoonnsshop.members.domain.Member;
-import com.example.yoonnsshop.members.dto.JoinDto;
-import com.example.yoonnsshop.members.repository.MemberRepository;
+import com.example.yoonnsshop.domain.members.MemberService;
+import com.example.yoonnsshop.domain.members.entity.Member;
+import com.example.yoonnsshop.domain.members.dto.JoinDto;
+import com.example.yoonnsshop.domain.members.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

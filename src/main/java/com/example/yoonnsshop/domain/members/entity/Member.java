@@ -1,6 +1,6 @@
-package com.example.yoonnsshop.members.domain;
+package com.example.yoonnsshop.domain.members.entity;
 
-import com.example.yoonnsshop.domain.BaseEntity;
+import com.example.yoonnsshop.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

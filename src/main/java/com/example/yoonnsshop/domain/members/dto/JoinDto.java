@@ -1,4 +1,4 @@
-package com.example.yoonnsshop.members.dto;
+package com.example.yoonnsshop.domain.members.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
