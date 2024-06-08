@@ -1,5 +1,6 @@
 package com.example.yoonnsshop.domain.admins;
 
+import com.example.yoonnsshop.config.ApiController;
 import com.example.yoonnsshop.config.ResponseMessageDto;
 import com.example.yoonnsshop.domain.admins.dto.LoginDto;
 import jakarta.validation.Valid;
@@ -7,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("api/admins")
+@ApiController
+@RequestMapping("admins")
 public class AdminController {
     private AdminService adminService;
 

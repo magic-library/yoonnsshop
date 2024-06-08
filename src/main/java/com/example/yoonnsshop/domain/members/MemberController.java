@@ -1,5 +1,6 @@
 package com.example.yoonnsshop.domain.members;
 
+import com.example.yoonnsshop.config.ApiController;
 import com.example.yoonnsshop.domain.members.dto.JoinDto;
 import com.example.yoonnsshop.domain.members.entity.Member;
 import com.example.yoonnsshop.config.ResponseMessageDto;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("api/members")
+@ApiController
+@RequestMapping("members")
 public class MemberController {
     private MemberService memberService;
 
