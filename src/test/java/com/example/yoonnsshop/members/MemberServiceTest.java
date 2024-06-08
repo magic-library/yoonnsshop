@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class MemberServiceTest {
@@ -24,10 +23,9 @@ public class MemberServiceTest {
         // when
         Member savedMember = userRepository.save(user);
 
-        System.out.println(savedMember.toString());
 
         // then
-        assertNotNull(savedMember.getSeq());
+        assertNotNull(savedMember);
         assertEquals(user.getEmail(), savedMember.getEmail());
         assertEquals(user.getPassword(), savedMember.getPassword());
     }

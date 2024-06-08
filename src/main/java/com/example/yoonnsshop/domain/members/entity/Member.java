@@ -19,10 +19,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false, name = "passwd")
     private String password;
 
-    @Setter
-    @Temporal(TemporalType.TIMESTAMP)
-    protected LocalDateTime lastLoginAt;
-
     public Member() {
     }
 

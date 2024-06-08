@@ -28,7 +28,7 @@ public class MemberService {
     }
 
     public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(memberRepository.findByEmail(email));
+        return memberRepository.findByEmail(email);
     }
 
     public Optional<Member> registerMember(JoinDto joinDto) {
@@ -39,8 +39,7 @@ public class MemberService {
                 .build();
 
         try {
-            Member savedMember = memberRepository.save(member);
-            return Optional.of(savedMember);
+            return Optional.ofNullable(memberRepository.save(member));
         } catch (Exception e) {
             return Optional.empty();
         }

@@ -11,6 +11,10 @@ public class ResponseMessageDto<T> {
     private boolean success;
     private T response;
 
+    public ResponseMessageDto(boolean success) {
+        this.success = success;
+    }
+
     public ResponseMessageDto(boolean success, T response) {
         this.success = success;
         this.response = response;
