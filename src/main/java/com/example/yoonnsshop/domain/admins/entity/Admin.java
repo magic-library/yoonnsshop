@@ -1,17 +1,15 @@
 package com.example.yoonnsshop.domain.admins.entity;
 
-import com.example.yoonnsshop.config.BaseEntity;
+import com.example.yoonnsshop.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @ToString(callSuper = true)
 @Table(name = "admins")
+@AttributeOverride(name = "seq", column = @Column(name = "admin_id"))
 public class Admin extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;

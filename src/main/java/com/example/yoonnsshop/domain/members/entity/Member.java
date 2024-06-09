@@ -1,17 +1,15 @@
 package com.example.yoonnsshop.domain.members.entity;
 
-import com.example.yoonnsshop.config.BaseEntity;
+import com.example.yoonnsshop.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @ToString(callSuper = true)
 @Table(name = "members")
+@AttributeOverride(name = "seq", column = @Column(name = "member_id"))
 public class Member extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
