@@ -39,7 +39,7 @@ public class MemberControllerTest {
     @MockBean
     MemberRepository memberRepository;
 
-    private final String baseUrl = "/api/members";
+    private final String baseUrl = "/api/v1/members";
 
     @Test
     @DisplayName("회원 리스트 조회")
@@ -63,7 +63,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원 시퀀스로 조회")
+    @DisplayName("회원 Id로 조회")
     public void getMemberById() throws Exception {
         // given
         Member member = new Member(1L, "email1@Test.com", "password1");

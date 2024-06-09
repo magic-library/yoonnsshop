@@ -1,9 +1,10 @@
-package com.example.yoonnsshop.config;
+package com.example.yoonnsshop.common;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public abstract class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     protected LocalDateTime createAt;
 
-//    @LastModifiedBy
-//    @Temporal(TemporalType.TIMESTAMP)
-//    protected LocalDateTime updatedAt;
+    @LastModifiedBy
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime updatedAt;
 }

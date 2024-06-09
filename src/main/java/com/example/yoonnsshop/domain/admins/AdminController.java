@@ -1,7 +1,7 @@
 package com.example.yoonnsshop.domain.admins;
 
 import com.example.yoonnsshop.config.ApiController;
-import com.example.yoonnsshop.config.ResponseMessageDto;
+import com.example.yoonnsshop.common.ApiResponse;
 import com.example.yoonnsshop.domain.admins.dto.LoginDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseMessageDto> login(@RequestBody @Valid LoginDto loginDto) {
-        ResponseMessageDto responseMessageDto = new ResponseMessageDto(false, "Email already exists");
-        return ResponseEntity.ok().body(responseMessageDto);
+    public ResponseEntity<ApiResponse> login(@RequestBody @Valid LoginDto loginDto) {
+        ApiResponse apiResponse = new ApiResponse(false, "Email already exists");
+        return ResponseEntity.ok().body(apiResponse);
     }
 }
