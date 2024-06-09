@@ -18,12 +18,14 @@ import java.util.Optional;
 @RequestMapping("admin/items")
 public class AdminItemController {
     private ItemService itemService;
+    private ExceptionHandler exceptionHandler;
 
     @Autowired
     public AdminItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
+    // TODO: 반환형 통합
     @GetMapping
     public ResponseEntity<List<Item>> getAllItem () {
         List<Item> items = itemService.findAll();
@@ -39,41 +41,19 @@ public class AdminItemController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse> createItem(@RequestBody @Valid CreateItemRequestDto requestDto) {
-        try {
-            Item createdItem = itemService.registerItem(requestDto);
-            return ResponseEntity.ok(new ApiResponse(true, createdItem));
-        } catch (InvalidRequestException e) {
-            ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
-            return ResponseEntity.badRequest().body(apiResponse);
-        } catch (DatabaseInsertionException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        Item createdItem = itemService.registerItem(requestDto);
+        return ResponseEntity.ok(new ApiResponse(true, createdItem));
     }
 
     @PatchMapping("{itemId}")
     public ResponseEntity<ApiResponse> updateItem(@PathVariable("itemId") Long itemId, @RequestBody UpdateItemRequestDto request) {
-        try {
-            Item updatedItem = itemService.updateItem(itemId, request);
-            return ResponseEntity.ok(new ApiResponse(true, updatedItem));
-        } catch (InvalidRequestException e) {
-            ApiResponse apiResponse = new ApiResponse(false, e.getMessage());
-            return ResponseEntity.badRequest().body(apiResponse);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (DatabaseUpdateException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        Item updatedItem = itemService.updateItem(itemId, request);
+        return ResponseEntity.ok(new ApiResponse(true, updatedItem));
     }
 
     @DeleteMapping("{itemId}")
     public ResponseEntity<ApiResponse> deleteItem(@PathVariable("itemId") Long itemId) {
-        try {
-            itemService.deleteItem(itemId);
-            return ResponseEntity.ok(new ApiResponse(true, "Item deleted successfully"));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (DatabaseDeletionException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        itemService.deleteItem(itemId);
+        return ResponseEntity.ok(new ApiResponse(true, "Item deleted successfully"));
     }
 }
