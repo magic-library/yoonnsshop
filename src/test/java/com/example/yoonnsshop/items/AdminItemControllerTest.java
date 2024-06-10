@@ -52,7 +52,7 @@ public class AdminItemControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private final String baseUrl = "/api/v1/admin/items";
+    private final String baseUrl = "/api/v1/admins/items";
 
     @Test
     @DisplayName("아이템 리스트 조회")

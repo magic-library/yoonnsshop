@@ -1,7 +1,6 @@
 package com.example.yoonnsshop.domain.items;
 
 import com.example.yoonnsshop.common.ApiResponse;
-import com.example.yoonnsshop.common.exception.*;
 import com.example.yoonnsshop.config.ApiController;
 import com.example.yoonnsshop.domain.items.dto.CreateItemRequestDto;
 import com.example.yoonnsshop.domain.items.dto.UpdateItemRequestDto;
@@ -15,10 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @ApiController
-@RequestMapping("admin/items")
+@RequestMapping("admins/items")
 public class AdminItemController {
     private ItemService itemService;
-    private ExceptionHandler exceptionHandler;
 
     @Autowired
     public AdminItemController(ItemService itemService) {

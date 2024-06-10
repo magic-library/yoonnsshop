@@ -18,9 +18,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody @Valid LoginDto loginDto) {
-        ApiResponse apiResponse = new ApiResponse(false, "Email already exists");
-        return ResponseEntity.ok().body(apiResponse);
+    @PostMapping("/authenticate")
+    public ResponseEntity<ApiResponse> authenticate(@RequestBody @Valid LoginDto loginDto) {
+        String token = adminService.authenticate(loginDto);
+        return ResponseEntity.ok().body(new ApiResponse(true, token));
     }
 }
