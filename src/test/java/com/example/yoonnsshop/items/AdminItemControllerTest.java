@@ -50,8 +50,6 @@ public class AdminItemControllerTest {
     @MockBean
     ItemRepository itemRepository;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     private final String baseUrl = "/api/v1/admins/items";
 
     @Test
@@ -130,11 +128,9 @@ public class AdminItemControllerTest {
         // when
         when(itemRepository.save(any(Item.class))).thenReturn(item);
 
-        String requestBody = objectMapper.writeValueAsString(createItemRequestDto);
-
         this.mockMvc.perform(post(baseUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(new ObjectMapper().writeValueAsString(createItemRequestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.name", is(item.getName())));
@@ -169,11 +165,9 @@ public class AdminItemControllerTest {
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(itemRepository.save(any(Item.class))).thenReturn(updatedItem);
 
-        String requestBody = objectMapper.writeValueAsString(updateRequest);
-
         this.mockMvc.perform(patch(baseUrl + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(new ObjectMapper().writeValueAsString(updateRequest)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.name", is(updatedItem.getName())))

@@ -100,12 +100,10 @@ public class MemberControllerTest {
     public void join() throws Exception {
         // given
         JoinDto joinDto = new JoinDto("email1@test.com", "password1");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String joinDtoJson = objectMapper.writeValueAsString(joinDto);
 
         // when
         this.mockMvc.perform(post(baseUrl + "/join")
-                        .content(joinDtoJson)
+                        .content(new ObjectMapper().writeValueAsString(joinDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                         .andDo(print())

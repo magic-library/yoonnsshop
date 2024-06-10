@@ -54,8 +54,6 @@ public class OrderControllerTest {
     @MockBean
     ItemRepository itemRepository;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     private final String baseUrl = "/api/v1/orders";
 
     @Test
@@ -89,7 +87,7 @@ public class OrderControllerTest {
         // when
         mockMvc.perform(post(baseUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
                 // then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(true));
