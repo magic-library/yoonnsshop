@@ -31,7 +31,7 @@ public class OrderService {
     }
 
     public List<Order> findAllByMemberId(Long userId) {
-        return null;
+        return orderRepository.findAllByMemberSeq(userId);
     }
 
     @Transactional
@@ -82,7 +82,7 @@ public class OrderService {
 
     public List<Order> getOwnerOrders() {
         Member member = getMember();
-        List<Order> allByMemberId = orderRepository.findAllByMemberId(member.getSeq());
+        List<Order> allByMemberId = orderRepository.findAllByMemberSeq(member.getSeq());
 
         return allByMemberId;
     }

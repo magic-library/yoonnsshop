@@ -106,7 +106,7 @@ public class OrderControllerTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order);
 
-        given(orderRepository.findAllByMemberId(1L)).willReturn(orders);
+        given(orderRepository.findAllByMemberSeq(1L)).willReturn(orders);
 
         // when
         mockMvc.perform(get(baseUrl)
