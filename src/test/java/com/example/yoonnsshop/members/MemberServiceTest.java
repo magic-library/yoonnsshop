@@ -18,7 +18,10 @@ public class MemberServiceTest {
     @Description("회원 등록 테스트")
     public void registerMember() {
         // given
-        Member user = new Member("test@example.com", "password");
+        Member user = Member.Builder.aMember()
+                .withEmail("test@example.com")
+                .withPassword("password")
+                .build();
 
         // when
         Member savedMember = userRepository.save(user);

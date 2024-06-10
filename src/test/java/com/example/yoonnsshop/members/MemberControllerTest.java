@@ -45,9 +45,23 @@ public class MemberControllerTest {
     @DisplayName("회원 리스트 조회")
     public void getAllMembers() throws Exception {
         // given
-        Member member1 = new Member(1L, "email1@test.com", "password1");
-        Member member2 = new Member(2L ,"email2@test.com", "password2");
-        Member member3 = new Member(3L, "email3@test.com", "password3");
+        Member member1 = Member.Builder.aMember()
+                        .withSeq(1L)
+                        .withEmail("email1@test.com")
+                        .withPassword("password1")
+                        .build();
+
+        Member member2 = Member.Builder.aMember()
+                        .withSeq(2L)
+                        .withEmail("email2@test.com")
+                        .withPassword("password2")
+                        .build();
+
+        Member member3 = Member.Builder.aMember()
+                        .withSeq(3L)
+                        .withEmail("email3@test.com")
+                        .withPassword("password3")
+                        .build();
 
         // when
         when(memberRepository.findAll()).thenReturn(Arrays.asList(member1, member2, member3));
@@ -66,7 +80,11 @@ public class MemberControllerTest {
     @DisplayName("회원 Id로 조회")
     public void getMemberById() throws Exception {
         // given
-        Member member = new Member(1L, "email1@Test.com", "password1");
+        Member member = Member.Builder.aMember()
+                .withSeq(1L)
+                .withEmail("email1@Test.com")
+                .withPassword("password1")
+                .build();
 
         // when
         when(memberRepository.findById(1L)).thenReturn(java.util.Optional.of(member));

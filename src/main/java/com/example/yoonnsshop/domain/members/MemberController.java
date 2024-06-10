@@ -22,6 +22,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    // TODO: 반환형 통일
     @GetMapping("{memberId}")
     public ResponseEntity<Member> getMemberById(@PathVariable("memberId")Long memberId) {
         Optional<Member> optionalMember = memberService.findById(memberId);
@@ -35,6 +36,7 @@ public class MemberController {
         return ResponseEntity.ok().body(members);
     }
 
+    // TODO: service / controller 역할 분리
     @PostMapping("join")
     public ResponseEntity<ApiResponse> join(@RequestBody @Valid JoinDto joinDto) {
         if (memberService.findByEmail(joinDto.getPrincipal()).isPresent()) {

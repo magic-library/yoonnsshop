@@ -31,9 +31,9 @@ public class Item extends BaseEntity {
 
     public static final class Builder {
         private String name;
-        private String description;
-        private BigDecimal price;
-        private Integer stockQuantity;
+        private String description = "";
+        private BigDecimal price = BigDecimal.ZERO;
+        private Integer stockQuantity = 0;
         private Long seq;
         private LocalDateTime createAt;
         private LocalDateTime updatedAt;

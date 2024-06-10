@@ -33,7 +33,7 @@ public class MemberService {
 
     public Optional<Member> registerMember(JoinDto joinDto) {
         validateMemberDto(joinDto);
-        Member member = new Member.Builder()
+        Member member = Member.Builder.aMember()
                 .withEmail(joinDto.getPrincipal())
                 .withPassword(joinDto.getCredentials())
                 .build();

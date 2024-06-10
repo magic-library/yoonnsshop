@@ -8,8 +8,6 @@ import com.example.yoonnsshop.domain.items.dto.CreateItemRequestDto;
 import com.example.yoonnsshop.domain.items.dto.UpdateItemRequestDto;
 import com.example.yoonnsshop.domain.items.entity.Item;
 import com.example.yoonnsshop.domain.items.repository.ItemRepository;
-import com.example.yoonnsshop.domain.members.dto.JoinDto;
-import com.example.yoonnsshop.domain.members.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
