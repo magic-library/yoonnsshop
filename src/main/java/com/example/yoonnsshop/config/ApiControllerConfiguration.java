@@ -3,11 +3,18 @@ package com.example.yoonnsshop.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.util.UrlPathHelper;
 
 @Configuration
 public class ApiControllerConfiguration implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("/api/v1", c -> true);
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setRemoveSemicolonContent(false);
+
+        configurer.setUrlPathHelper(urlPathHelper);
+        configurer.addPathPrefix("/api/v1", clazz ->
+                clazz.isAnnotationPresent(ApiController.class)
+        );
     }
 }
