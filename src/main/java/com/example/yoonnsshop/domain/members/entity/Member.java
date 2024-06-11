@@ -18,12 +18,12 @@ public class Member extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false, name = "passwd")
-    private String password;
+    @Column
+    private String name;
 
     public static final class Builder {
         private String email;
-        private String password;
+        private String name;
         private Long seq;
         private LocalDateTime createAt;
         private LocalDateTime updatedAt;
@@ -40,8 +40,8 @@ public class Member extends BaseEntity {
             return this;
         }
 
-        public Builder withPassword(String password) {
-            this.password = password;
+        public Builder withName(String name) {
+            this.name = name;
             return this;
         }
 
@@ -62,11 +62,12 @@ public class Member extends BaseEntity {
 
         public Member build() {
             Member member = new Member();
-            member.updatedAt = this.updatedAt;
-            member.seq = this.seq;
             member.email = this.email;
-            member.password = this.password;
+            member.name = this.name;
+            member.seq = this.seq;
             member.createAt = this.createAt;
+            member.updatedAt = this.updatedAt;
+
             return member;
         }
     }

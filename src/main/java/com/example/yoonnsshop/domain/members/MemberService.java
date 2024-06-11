@@ -35,7 +35,6 @@ public class MemberService {
         validateMemberDto(joinDto);
         Member member = Member.Builder.aMember()
                 .withEmail(joinDto.getPrincipal())
-                .withPassword(joinDto.getCredentials())
                 .build();
 
         try {
