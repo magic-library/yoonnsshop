@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/main/resources/application-dev.properties:/app/config/application-dev.properties
+    environment:
+      - SPRING_CONFIG_LOCATION=/app/config/application-dev.properties
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+    #      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/shop
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=test123
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: shop
+    volumes:
+      - ./db/mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
