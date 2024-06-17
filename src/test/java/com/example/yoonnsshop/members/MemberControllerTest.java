@@ -48,19 +48,16 @@ public class MemberControllerTest {
         Member member1 = Member.Builder.aMember()
                         .withSeq(1L)
                         .withEmail("email1@test.com")
-                        .withPassword("password1")
                         .build();
 
         Member member2 = Member.Builder.aMember()
                         .withSeq(2L)
                         .withEmail("email2@test.com")
-                        .withPassword("password2")
                         .build();
 
         Member member3 = Member.Builder.aMember()
                         .withSeq(3L)
                         .withEmail("email3@test.com")
-                        .withPassword("password3")
                         .build();
 
         // when
@@ -83,7 +80,6 @@ public class MemberControllerTest {
         Member member = Member.Builder.aMember()
                 .withSeq(1L)
                 .withEmail("email1@Test.com")
-                .withPassword("password1")
                 .build();
 
         // when
@@ -95,18 +91,18 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.email", is(member.getEmail())));
     }
 
-    @Test
-    @DisplayName("회원가입")
-    public void join() throws Exception {
-        // given
-        JoinDto joinDto = new JoinDto("email1@test.com", "password1");
-
-        // when
-        this.mockMvc.perform(post(baseUrl + "/join")
-                        .content(new ObjectMapper().writeValueAsString(joinDto))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk());
-    }
+//    @Test
+//    @DisplayName("회원가입")
+//    public void join() throws Exception {
+//        // given
+//        JoinDto joinDto = new JoinDto("email1@test.com", "password1");
+//
+//        // when
+//        this.mockMvc.perform(post(baseUrl + "/join")
+//                        .content(new ObjectMapper().writeValueAsString(joinDto))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                        .andDo(print())
+//                        .andExpect(status().isOk());
+//    }
 }

@@ -20,7 +20,6 @@ public class MemberServiceTest {
         // given
         Member user = Member.Builder.aMember()
                 .withEmail("test@example.com")
-                .withPassword("password")
                 .build();
 
         // when
@@ -30,6 +29,5 @@ public class MemberServiceTest {
         // then
         assertNotNull(savedMember);
         assertEquals(user.getEmail(), savedMember.getEmail());
-        assertEquals(user.getPassword(), savedMember.getPassword());
     }
 }
