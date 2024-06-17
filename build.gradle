@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java:8.0.32'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -45,3 +46,10 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+test {
+    systemProperties = [
+            'spring.profiles.active': 'test'
+    ]
+}
+
