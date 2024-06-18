@@ -75,7 +75,7 @@ public class MemberItemControllerTest {
         when(itemService.findAll(pageable)).thenReturn(itemPage);
 
         // then
-        this.mockMvc.perform(get(baseUrl))
+        this.mockMvc.perform(get(baseUrl + "/v2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content", hasSize(3)))

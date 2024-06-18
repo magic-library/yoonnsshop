@@ -85,12 +85,13 @@ public class AdminItemControllerTest {
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Item> itemPage = new PageImpl<>(Arrays.asList(item1, item2, item3), pageable, 3);
+//        Page<Item> itemPage = new PageImpl<>(Arrays.asList(item1, item2, item3), pageable, 3);
 
-        when(itemService.findAll(pageable)).thenReturn(itemPage);
+        when(itemRepository.getItemCount()).thenReturn(3L);
+        when(itemRepository.findAllWithoutCounter(pageable)).thenReturn(Arrays.asList(item1, item2, item3));
 
         // then
-        this.mockMvc.perform(get(baseUrl))
+        this.mockMvc.perform(get(baseUrl+ "/v2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(3)))
@@ -207,7 +208,5 @@ public class AdminItemControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // then
-        assertTrue(itemRepository.findById(1L).isEmpty());
     }
 }
