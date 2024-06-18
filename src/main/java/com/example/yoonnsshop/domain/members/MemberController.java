@@ -15,7 +15,7 @@ import java.util.Optional;
 @ApiController
 @RequestMapping("members")
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @Autowired
     public MemberController(MemberService memberService) {

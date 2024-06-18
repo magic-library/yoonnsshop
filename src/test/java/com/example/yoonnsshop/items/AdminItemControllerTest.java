@@ -12,11 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -77,13 +82,19 @@ public class AdminItemControllerTest {
                 .build();
 
         // when
-        when(itemRepository.findAll()).thenReturn(Arrays.asList(item1, item2, item3));
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Item> itemPage = new PageImpl<>(Arrays.asList(item1, item2, item3), pageable, 3);
+
+        when(itemService.findAll(pageable)).thenReturn(itemPage);
 
         // then
         this.mockMvc.perform(get(baseUrl))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3))); // 응답 본문에 3명의 사용자가 있는지 확인합니다.
+                .andExpect(jsonPath("$.content", hasSize(3)))
+                .andExpect(jsonPath("$.totalElements", is(3)));
     }
 
     @Test

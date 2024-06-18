@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ import java.time.LocalDateTime;
 @Table(name = "items")
 @AttributeOverride(name = "seq", column = @Column(name = "item_id"))
 @RequiredArgsConstructor
+@FilterDef(name = "activeFilter", defaultCondition = "active = true")
+@Filter(name = "activeFilter")
 public class Item extends BaseEntity {
     @Column(name = "item_name")
     private String name;
@@ -28,6 +32,9 @@ public class Item extends BaseEntity {
 
     @Column(name = "item_stock_quantity")
     private Integer stockQuantity;
+
+    @Column(nullable = false)
+    private boolean active = true; // 기본값은 true(활성화 상태)
 
     public static final class Builder {
         private String name;
@@ -91,5 +98,13 @@ public class Item extends BaseEntity {
             item.updatedAt = this.updatedAt;
             return item;
         }
+    }
+
+    public void activate() {
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
     }
 }

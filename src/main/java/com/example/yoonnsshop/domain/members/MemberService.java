@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
     public MemberService(MemberRepository memberRepository) {

@@ -8,31 +8,62 @@ import com.example.yoonnsshop.domain.items.dto.CreateItemRequestDto;
 import com.example.yoonnsshop.domain.items.dto.UpdateItemRequestDto;
 import com.example.yoonnsshop.domain.items.entity.Item;
 import com.example.yoonnsshop.domain.items.repository.ItemRepository;
+import jakarta.persistence.EntityManager;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ItemService {
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, RedisTemplate<String, String> redisTemplate) {
         this.itemRepository = itemRepository;
+        this.redisTemplate = redisTemplate;
+    }
+
+    private void enableFilter() {
+        entityManager.unwrap(Session.class).enableFilter("activeFilter");
     }
 
     public List<Item> findAll() {
+        enableFilter();
         List<Item> items = itemRepository.findAll();
         return items;
     }
 
+    public Page<Item> findAll(Pageable pageable) {
+        enableFilter();
+        return itemRepository.findAll(pageable); // 페이징된 데이터
+    }
+
+    public Page<Item> findAllV2(Pageable pageable) {
+        enableFilter();
+        Long totalCount = itemRepository.getItemCount(); // Redis에서 가져온 총 개수
+        List<Item> items = itemRepository.findAllWithoutCounter(pageable); // 페이징된 데이터
+        return new PageImpl<>(items, pageable, totalCount);
+    }
+
     public Optional<Item> findById(Long itemId) {
+        enableFilter();
         return itemRepository.findById(itemId);
     }
 
+    @Transactional
     public Item registerItem(CreateItemRequestDto requestDto) {
+        enableFilter();
         validateCreateItemRequestDto(requestDto);
         Item item = Item.Builder.anItem()
                 .withName(requestDto.getName())
@@ -40,6 +71,8 @@ public class ItemService {
                 .withPrice(requestDto.getPrice())
                 .withStockQuantity(requestDto.getStockQuantity())
                 .build();
+
+        redisTemplate.opsForValue().increment("item_count");
 
         return Optional.of(item)
                 .map(itemRepository::save)
@@ -52,7 +85,9 @@ public class ItemService {
         }
     }
 
+    @Transactional
     public Item updateItem(Long itemId, UpdateItemRequestDto updateDto) {
+        enableFilter();
         // validation check
         validateUpdateItemRequestDto(updateDto);
 
@@ -77,15 +112,25 @@ public class ItemService {
         }
     }
 
+    @Transactional
     public void deleteItem(Long itemId) {
+        enableFilter();
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + itemId));
+        existingItem.deactivate();
 
-        Optional.of(existingItem)
-                .map(item -> {
-                    itemRepository.delete(item);
-                    return item;
-                })
-                .orElseThrow(() -> new DatabaseDeletionException("Failed to delete item with id: " + itemId));
+        try {
+            itemRepository.save(existingItem);
+        } catch (Exception e) {
+            throw new DatabaseDeletionException("Failed to delete item with id: " + itemId, e);
+        }
+
+        redisTemplate.opsForValue().decrement("item_count");
+    }
+
+    @Transactional
+    public void updateCountCache() {
+        Long totalCount = itemRepository.count();
+        redisTemplate.opsForValue().set("item_count", totalCount.toString());
     }
 }

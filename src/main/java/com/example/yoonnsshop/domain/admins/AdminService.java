@@ -17,7 +17,7 @@ import java.util.Collections;
 public class AdminService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtilities jwtUtilities;
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
     @Autowired
     public AdminService(AdminRepository adminRepository, AuthenticationManager authenticationManager, JwtUtilities jwtUtilities) {

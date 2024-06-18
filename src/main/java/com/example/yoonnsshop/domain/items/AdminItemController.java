@@ -7,6 +7,9 @@ import com.example.yoonnsshop.domain.items.dto.UpdateItemRequestDto;
 import com.example.yoonnsshop.domain.items.entity.Item;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,19 +19,30 @@ import java.util.Optional;
 @ApiController
 @RequestMapping("admins/items")
 public class AdminItemController {
-    private ItemService itemService;
+    private final ItemService itemService;
 
     @Autowired
     public AdminItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
-    // TODO: 반환형 통합
     @GetMapping
     public ResponseEntity<List<Item>> getAllItem () {
         List<Item> items = itemService.findAll();
         return ResponseEntity.ok().body(items);
     }
+
+    // paging 적용
+    @GetMapping("/v2")
+    public ResponseEntity<Page<Item>> getAllItemV2(
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Item> itemPage = itemService.findAllV2(pageable);
+        return ResponseEntity.ok().body(itemPage);
+    }
+
 
     @GetMapping("{itemId}")
     public ResponseEntity<Item> getItemById(@PathVariable("itemId") Long itemId) {
