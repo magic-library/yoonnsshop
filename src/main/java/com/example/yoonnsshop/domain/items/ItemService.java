@@ -25,13 +25,13 @@ import java.util.Optional;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, RedisTemplate<String, String> redisTemplate) {
+    public ItemService(ItemRepository itemRepository, RedisTemplate<String, String> redisTemplate, EntityManager entityManager) {
         this.itemRepository = itemRepository;
         this.redisTemplate = redisTemplate;
+        this.entityManager = entityManager;
     }
 
     private void enableFilter() {
@@ -72,11 +72,13 @@ public class ItemService {
                 .withStockQuantity(requestDto.getStockQuantity())
                 .build();
 
-        redisTemplate.opsForValue().increment("item_count");
+        Item savedItem = itemRepository.save(item);
+        if (savedItem == null) {
+            throw new DatabaseInsertionException("Failed to register item");
+        }
 
-        return Optional.of(item)
-                .map(itemRepository::save)
-                .orElseThrow(() -> new DatabaseInsertionException("Failed to register item"));
+        redisTemplate.opsForValue().increment("item_count");
+        return savedItem;
     }
 
     private void validateCreateItemRequestDto(CreateItemRequestDto item) {
