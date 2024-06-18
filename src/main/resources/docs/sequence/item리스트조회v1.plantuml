@@ -1,0 +1,23 @@
+@startuml
+autoactivate on
+title item 리스트 조회(v1)
+actor client
+box "api server"
+    participant controller
+    participant service
+    participant repository
+    database mysql
+
+    client->controller: GET /items
+    controller->service: find all
+    service->repository: find all
+    repository->mysql: select * from items limit ?,?
+    mysql-->repository: return
+    repository->mysql: count(*) from items "✖︎heavy query✖︎"
+    mysql-->repository: return
+    repository-->service: return
+    service-->controller: return
+    controller-->client: return
+end box
+
+@enduml

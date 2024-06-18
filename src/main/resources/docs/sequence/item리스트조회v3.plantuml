@@ -1,0 +1,32 @@
+@startuml
+autoactivate on
+title item 리스트 조회(v2)
+actor client
+box "api server"
+    participant "initializer,scheduler" as itemCountManager
+    participant controller
+    participant service
+    participant repository
+    database mysql
+    database redis
+'   initialize service
+    itemCountManager->service: update item_count
+    service->mysql: select count(*) from items
+    mysql-->service: return
+    service->redis: set item_count
+    redis-->service: return
+
+'   get items
+    client->controller: GET /items
+    controller->service: find all
+    service->repository: find all
+    repository->mysql: select * from items limit ?,?
+    mysql-->repository: return
+    repository->redis: get item_count
+    mysql-->repository: return
+    repository-->service: return
+    service-->controller: return
+    controller-->client: return
+end box
+
+@enduml
