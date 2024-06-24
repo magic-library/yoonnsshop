@@ -1,6 +1,6 @@
 # project variables
 PROJECT_NAME := yoonnsshop
-VERSION := 0.0.1
+VERSION := $(shell grep projectVersion gradle.properties | cut -d'=' -f2)
 
 # JAR file path
 JAR_FILE := build/libs/$(PROJECT_NAME)-$(VERSION)-SNAPSHOT.jar
@@ -30,7 +30,7 @@ docker-build: check-jar
 # execute docker-compose
 .PHONY: docker-run
 docker-run: docker-build
-	docker-compose up -d
+	PROJECT_NAME=${PROJECT_NAME} VERSION=${VERSION} docker-compose up -d
 
 # stop docker-compose
 .PHONY: docker-stop
