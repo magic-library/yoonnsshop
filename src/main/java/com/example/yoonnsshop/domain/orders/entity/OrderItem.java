@@ -92,4 +92,12 @@ public class OrderItem extends BaseEntity {
             return orderItem;
         }
     }
+
+    public Long getItemSeq() {
+        return this.item.getSeq();
+    }
+
+    public String getItemName() {
+        return this.item.getName();
+    }
 }

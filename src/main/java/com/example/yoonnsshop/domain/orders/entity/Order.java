@@ -5,9 +5,14 @@ import com.example.yoonnsshop.domain.members.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,7 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 @AttributeOverride(name = "seq", column = @Column(name = "order_id"))
 public class Order extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -25,6 +30,10 @@ public class Order extends BaseEntity {
 
     @Column(name = "order_total_price")
     private BigDecimal totalPrice;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @BatchSize(size = 10000)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public static final class Builder {
         private Member member;

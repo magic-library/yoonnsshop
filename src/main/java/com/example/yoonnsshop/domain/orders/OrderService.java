@@ -3,6 +3,7 @@ package com.example.yoonnsshop.domain.orders;
 import com.example.yoonnsshop.domain.items.entity.Item;
 import com.example.yoonnsshop.domain.items.repository.ItemRepository;
 import com.example.yoonnsshop.domain.members.entity.Member;
+import com.example.yoonnsshop.domain.orders.dto.OrderDto;
 import com.example.yoonnsshop.domain.orders.dto.OrderItemDto;
 import com.example.yoonnsshop.domain.orders.dto.CreateOrderRequestDto;
 import com.example.yoonnsshop.domain.orders.entity.Order;
@@ -10,14 +11,20 @@ import com.example.yoonnsshop.domain.orders.entity.OrderItem;
 import com.example.yoonnsshop.domain.orders.entity.OrderStatus;
 import com.example.yoonnsshop.domain.orders.repository.OrderItemRepository;
 import com.example.yoonnsshop.domain.orders.repository.OrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -30,8 +37,12 @@ public class OrderService {
         this.itemRepository = itemRepository;
     }
 
-    public List<Order> findAllByMemberId(Long userId) {
-        return orderRepository.findAllByMemberSeq(userId);
+    public List<Order> findAllByMemberId(Long memberId) {
+        Pageable pageable = PageRequest.of(0, 10);
+        // exper: JOIN
+        return getOrdersForMember(memberId, pageable);
+        // exper: origin
+//        return orderRepository.findAllByMemberSeq(memberId, pageable);
     }
 
     @Transactional
@@ -46,7 +57,7 @@ public class OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (OrderItemDto orderItemDto : requestDto.getOrderItems()) {
-            Item item = itemRepository.findById(orderItemDto.getItemId())
+            Item item = itemRepository.findById(orderItemDto.getItemSeq())
                     .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
             OrderItem orderItem = OrderItem.Builder.anOrderItem()
@@ -80,10 +91,63 @@ public class OrderService {
                 .build();
     }
 
-    public List<Order> getOwnerOrders() {
+    public List<OrderDto> getOwnerOrders() {
         Member member = getMember();
-        List<Order> allByMemberId = orderRepository.findAllByMemberSeq(member.getSeq());
+        Pageable pageable = PageRequest.of(0, 10);
 
-        return allByMemberId;
+        List<Order> orders = orderRepository.findAllByMemberSeq(member.getSeq(), pageable);
+        List<OrderDto> orderDtos = orders.stream()
+                .map(order -> new OrderDto(order))
+                .collect(Collectors.toList());
+
+        return orderDtos;
     }
+
+    public List<OrderDto> getOwnerOrdersV2() {
+        Member member = getMember();
+        Pageable pageable = PageRequest.of(0, 10);
+
+        List<Order> orders = getOrdersForMember(member.getSeq(), pageable);
+        List<OrderDto> orderDtos = orders.stream()
+                .map(order -> new OrderDto(order))
+                .collect(Collectors.toList());
+
+        return orderDtos;
+    }
+
+    public List<OrderDto> getOwnerOrdersV3() {
+        Member member = getMember();
+        Pageable pageable = PageRequest.of(0, 10);
+
+        List<Order> orders = getOrdersForMember(member.getSeq(), pageable);
+        List<OrderDto> orderDtos = orders.stream()
+                .map(order -> new OrderDto(order))
+                .collect(Collectors.toList());
+
+        return orderDtos;
+    }
+
+    public List<OrderDto> getOwnerOrdersV4() {
+        Member member = getMember();
+        Pageable pageable = PageRequest.of(0, 1000);
+
+        List<Order> orders = orderRepository.findAllByMemberSeq(member.getSeq(), pageable);
+        List<OrderDto> orderDtos = orders.stream()
+                .map(order -> new OrderDto(order))
+                .collect(Collectors.toList());
+
+        return orderDtos;
+    }
+
+    public List<Order> getOrdersForMember(Long memberId, Pageable pageable) {
+        List<Long> orderIds = orderRepository.findOrderIdsByMemberSeq(memberId, pageable);
+        return orderRepository.findOrdersWithItemsByIds(orderIds);
+    }
+
+    public List<Order> getOrdersForMemberUsingEntityGraph(Long memberId, Pageable pageable) {
+        List<Long> orderIds = orderRepository.findOrderIdsByMemberSeq(memberId, pageable);
+        return orderRepository.findOrdersWithItemsBySeqIn(orderIds);
+    }
+
+
 }

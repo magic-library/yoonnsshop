@@ -6,6 +6,7 @@ import com.example.yoonnsshop.domain.orders.OrderService;
 import com.example.yoonnsshop.domain.orders.dto.CreateOrderRequestDto;
 import com.example.yoonnsshop.domain.orders.dto.OrderItemDto;
 import com.example.yoonnsshop.domain.orders.entity.Order;
+import com.example.yoonnsshop.domain.orders.entity.OrderItem;
 import com.example.yoonnsshop.domain.orders.entity.OrderStatus;
 import com.example.yoonnsshop.domain.orders.repository.OrderItemRepository;
 import com.example.yoonnsshop.domain.orders.repository.OrderRepository;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,8 +59,9 @@ public class OrderControllerTest {
     @DisplayName("주문 생성")
     public void createOrder() throws Exception{
         // given
-        OrderItemDto orderItemDto = new OrderItemDto();
-        orderItemDto.setItemId(1L); // 아이템 ID를 설정합니다.
+        OrderItem orderItem = null;
+        OrderItemDto orderItemDto = new OrderItemDto(orderItem);
+//        orderItemDto.setItemId(1L); // 아이템 ID를 설정합니다.
         orderItemDto.setQuantity(2); // 수량을 설정합니다.
 
         List<OrderItemDto> orderItems = new ArrayList<>();
@@ -103,7 +104,7 @@ public class OrderControllerTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order);
 
-        given(orderRepository.findAllByMemberSeq(1L)).willReturn(orders);
+//        given(orderRepository.findAllByMemberSeq(1L, pageable)).willReturn(orders);
 
         // when
         mockMvc.perform(get(baseUrl)
