@@ -50,6 +50,12 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse(true, orders));
     }
 
+    @GetMapping("v5") // BatchSize
+    public ResponseEntity<ApiResponse> getOwnerOrdersV5() {
+        List<OrderDto> orders = orderService.getOwnerOrdersV5();
+        return ResponseEntity.ok(new ApiResponse(true, orders));
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse> createOrder(@RequestBody CreateOrderRequestDto requestDto) {
         Order order = orderService.generateOrderInvoice(requestDto);
