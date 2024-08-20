@@ -1,23 +1,23 @@
 version: '3'
 services:
-#  app:
-#    image: ${PROJECT_NAME}:${VERSION}
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./src/main/resources:/app/config
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-#      - JWT_SECRET=${JWT_SECRET}
-#      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-#      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-#    depends_on:
-#      - db
-#    networks:
-#      - app-network
+  app:
+    image: yoonnsshop:${VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/main/resources:/app/config
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - JWT_SECRET=${JWT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+    depends_on:
+      - db
+    networks:
+      - app-network
 
   db:
     image: mysql:latest
@@ -64,7 +64,7 @@ services:
     ports:
       - 9090:9090
     environment:
-      - HOST_IP=${HOST_IP}
+      - HOST_IP=${HOST_IP:-host.docker.internal}
     networks:
       - app-network
     depends_on:
@@ -86,22 +86,20 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    privileged: true
-    devices:
-      - /dev/kmsg:/dev/kmsg
+    security_opt:
+      - no-new-privileges:true
     ports:
       - 8088:8080
     networks:
       - app-network
     command:
-#      - -disable_metrics=disk,network,tcp,udp,percpu,sched,process
-      - -housekeeping_interval=5s
+      - --docker_only
+      - --disable_metrics=disk,cpu,network
+      - --housekeeping_interval=10s
 
 
 volumes:
