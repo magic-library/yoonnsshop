@@ -32,6 +32,17 @@ make build
 
 ## Start
 프로젝트를 시작하는 방법은 Gradle을 사용하는 방법, Docker를 사용하는 방법 두 가지가 있습니다.
+
+1. Gradle을 사용한 방법
+```bash
+make local-run
+```
+
+```bash
+make docker-run-without-app
+```
+
+
 2. Docker를 사용한 방법
 ```bash
 make docker-run
@@ -49,7 +60,13 @@ make test
 
 ## Packaging
 프로젝트 패키징은 빌드 과정에 포함되어 있습니다. JAR 파일은 build/libs/ 디렉토리에 생성됩니다.
-Docker 이미지를 별도로 빌드하려면:
+1. JAR 파일 생성
+```bash
+make jar
+```
+
+또는 Docker 이미지를 생성할 수 있습니다. Docker 이미지는 Dockerfile을 사용하여 빌드되며, Dockerfile은 프로젝트 루트 디렉토리에 있습니다.
+2. Docker 이미지 생성(Optional)
 ```bash
 make docker-build
 ```

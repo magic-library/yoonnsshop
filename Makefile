@@ -6,13 +6,12 @@ VERSION := $(shell grep projectVersion gradle.properties | cut -d'=' -f2)
 JAR_FILE := build/libs/$(PROJECT_NAME)-$(VERSION)-SNAPSHOT.jar
 
 # docker variables
-DOCKER_IMAGE := $(PROJECT_NAME):$(VERSION)
 DOCKER_CONTAINER := $(PROJECT_NAME)-container
 
 # gradle build
 .PHONY: build
 build:
-	./gradlew clean build
+	./gradlew clean build -x test
 
 # check jar file
 .PHONY: check-jar
@@ -25,34 +24,49 @@ check-jar:
 # build docker image
 .PHONY: docker-build
 docker-build: check-jar
-	docker build -t $(DOCKER_IMAGE) .
+	docker build -t $(PROJECT_NAME):latest .
 
-# execute docker-compose
+# execute docker compose
 .PHONY: docker-run
 docker-run: docker-build
-	PROJECT_NAME=${PROJECT_NAME} VERSION=${VERSION} docker-compose up -d
+	docker compose --env-file .env up -d
 
-# stop docker-compose
+.PHONY: docker-run-without-app
+docker-run-without-app:
+	APP_HOST=host.docker.internal:8080 docker compose --env-file .env up -d db redis prometheus grafana cadvisor
+
+# stop docker compose
 .PHONY: docker-stop
 docker-stop:
-	docker-compose down
+	docker compose down
 
-# status docker-compose
+# status docker compose
 .PHONY: docker-ps
 docker-ps:
-	docker-compose ps
+	docker compose ps
 
 .PHONY: docker-logs-app
 docker-logs-app:
-	docker-compose logs -f app
+	docker compose logs -f app
 
-# execute docker-compose(all)
+# execute docker compose(all)
 .PHONY: all
 all: build docker-run
+
+.PHONY: test
+test: ./gradlew test
 
 # clean
 .PHONY: clean
 clean:
 	./gradlew clean
-	docker-compose down
+	docker compose down
 	docker rmi $(DOCKER_IMAGE)
+
+.PHONY: jar
+jar:
+	./gradlew bootJar
+
+.PHONY: run
+run:
+	./gradlew bootRun
