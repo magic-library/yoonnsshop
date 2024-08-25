@@ -34,22 +34,26 @@ make build
 ## Start
 프로젝트를 시작하는 방법은 Gradle을 사용하는 방법, Docker를 사용하는 방법 두 가지가 있습니다.
 
-1. Gradle을 사용한 방법
+### 1. Gradle을 사용한 방법
+
+로컬 환경에서 Gradle을 통해 프로젝트를 직접 실행하려면 다음 명령어를 사용하세요:
 ```bash
 make local-run
 ```
 
-```bash
-make docker-run-without-app
-```
+### 2. Docker를 사용한 방법
 
-
-2. Docker를 사용한 방법
+a) 모든 서비스를 Docker 컨테이너로 실행:
 ```bash
 make docker-run
 ```
 
-전체 과정(빌드부터 실행까지)을 한 번에 수행하려면:
+b) 애플리케이션을 제외한 서비스만 Docker 컨테이너로 실행:
+```bash
+make docker-run-without-app
+```
+
+c) 전체 과정(빌드부터 실행까지)을 한 번에 수행 후 Docker 컨테이너로 실행:
 ```bash
 make all
 ```
@@ -67,6 +71,7 @@ make jar
 ```
 
 또는 Docker 이미지를 생성할 수 있습니다. Docker 이미지는 Dockerfile을 사용하여 빌드되며, Dockerfile은 프로젝트 루트 디렉토리에 있습니다.
+
 2. Docker 이미지 생성(Optional)
 ```bash
 make docker-build
