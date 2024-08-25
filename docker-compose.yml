@@ -55,7 +55,9 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml.template:/etc/prometheus/prometheus.yml.template:ro
+      - ./prometheus-entrypoint.sh:/prometheus-entrypoint.sh
+    entrypoint: ["/prometheus-entrypoint.sh"]
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -63,8 +65,9 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
       - 9090:9090
+
     environment:
-      - HOST_IP=${HOST_IP:-host.docker.internal}
+      - APP_HOST=${APP_HOST:-app:8080}
     networks:
       - app-network
     depends_on:
@@ -88,6 +91,7 @@ services:
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     security_opt:

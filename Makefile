@@ -36,8 +36,8 @@ docker-run-without-app:
 	APP_HOST=host.docker.internal:8080 docker compose --env-file .env up -d db redis prometheus grafana cadvisor
 
 # stop docker compose
-.PHONY: docker-stop
-docker-stop:
+.PHONY: docker-down
+docker-down:
 	docker compose down
 
 # status docker compose

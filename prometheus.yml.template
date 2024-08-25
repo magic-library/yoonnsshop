@@ -5,12 +5,10 @@ scrape_configs:
   - job_name: 'yoonnsshop-app'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['${APP_HOST:-app:8080}']
+      - targets: ['${APP_HOST}']
         labels:
           application: 'yoonnsshop'
-          environment: '${ENV:-development}'
   - job_name: 'cadvisor'
     scrape_interval: 5s
     static_configs:
       - targets: ['cadvisor:8080']
-
