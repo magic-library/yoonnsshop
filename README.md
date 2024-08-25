@@ -8,6 +8,7 @@ yoonnsshop은 Java와 Spring 기반의 이커머스 플랫폼 프로젝트로, �
 3. 대규모 트래픽 처리를 위한 시스템 설계
 4. Monolithic 아키텍처에서 MSA(Microservices Architecture)로의 전환 과정
 
+- blog link : [https://velog.io/@yoonn/series/yoonnsshop](https://velog.io/@yoonn/series/yoonnsshop)
 ## Setup
 1. 코드 다운로드 
 
